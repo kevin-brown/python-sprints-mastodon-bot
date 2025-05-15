@@ -54,9 +54,76 @@ for open_space in open_space_data:
 
 open_spaces = sorted(open_spaces, key=lambda x: x["sort_time"])
 
-for open_space in open_spaces:
-    post = f"A new open space was announced for {open_space["start_day"]} at {open_space["start_time"]}" + "\n\n"
-    post += open_space["summary"] + "\n\n"
-    post += open_space["details"]
+mastodon_posts_by_day = {
+    "Friday": 114512945743943792,
+    # "Saturday": 0,
+    # "Sunday": 0,
+}
 
-    print(post)
+mastodon_already_posted = {
+    "Friday": [],
+    "Saturday": [],
+    "Sunday": [],
+}
+
+for day, post_id in mastodon_posts_by_day.items():
+    mastodon_already_posted[day] = mastodon.status_context(post_id).descendants
+
+for open_space in open_spaces:
+    posts = []
+
+    details = open_space["details"]
+    extra_details = ""
+
+    if len(details) > 325:
+        details = open_space["details"][:325].rsplit(" ", 1)[0].strip()
+        extra_details = open_space["details"][len(details):].strip()
+
+    post = f"""
+A new open space #PyConUS was announced for {open_space["start_day"]} at {open_space["start_time"]}
+
+{open_space["summary"]}
+
+{details}
+
+#PyConUSOpenSpaces #PyConUS2025
+""".strip()
+
+    posts.append(post)
+
+    if extra_details:
+        continued = f"""
+{open_space["summary"]} (continued)
+
+{extra_details}
+""".strip()
+
+        posts.append(continued)
+
+    should_post = True
+
+    for post in mastodon_already_posted[open_space["start_day"]]:
+        print(open_space["summary"], post.content)
+        if open_space["summary"].replace("&", "&amp;") in post.content:
+            should_post = False
+            break
+
+    if should_post:
+        print(posts)
+
+        mastodon_post = mastodon.status_post(
+            status=posts[0],
+            visibility="unlisted",
+            in_reply_to_id=mastodon_posts_by_day[open_space["start_day"]],
+        )
+
+        mastodon_already_posted[open_space["start_day"]].append(mastodon_post)
+
+        if len(posts) > 1:
+            mastodon.status_post(
+                status=posts[1],
+                visibility="unlisted",
+                in_reply_to_id=mastodon_post.id,
+            )
+
+        break
