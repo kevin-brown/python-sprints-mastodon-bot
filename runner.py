@@ -56,7 +56,7 @@ open_spaces = sorted(open_spaces, key=lambda x: x["sort_time"])
 
 mastodon_posts_by_day = {
     "Friday": 114512945743943792,
-    # "Saturday": 0,
+    "Saturday": 114513045657865732,
     # "Sunday": 0,
 }
 
@@ -103,13 +103,13 @@ A new open space #PyConUS was announced for {open_space["start_day"]} at {open_s
     should_post = True
 
     for post in mastodon_already_posted[open_space["start_day"]]:
-        print(open_space["summary"], post.content)
         if open_space["summary"].replace("&", "&amp;") in post.content:
             should_post = False
             break
 
     if should_post:
         print(posts)
+        break
 
         mastodon_post = mastodon.status_post(
             status=posts[0],
