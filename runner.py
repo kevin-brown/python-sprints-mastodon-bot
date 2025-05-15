@@ -80,7 +80,7 @@ for open_space in open_spaces:
         extra_details = open_space["details"][len(details):].strip()
 
     post = f"""
-A new open space #PyConUS was announced for {open_space["start_day"]} at {open_space["start_time"]}
+A new open space at #PyConUS was announced for {open_space["start_day"]} at {open_space["start_time"]}
 
 {open_space["summary"]}
 
@@ -103,7 +103,7 @@ A new open space #PyConUS was announced for {open_space["start_day"]} at {open_s
     should_post = True
 
     for post in mastodon_already_posted[open_space["start_day"]]:
-        if open_space["summary"].replace("&", "&amp;") in post.content:
+        if open_space["summary"].replace("&", "&amp;").replace('"', "&quot;").replace("'", "&#39;") in post.content:
             should_post = False
             break
 
