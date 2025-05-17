@@ -80,9 +80,9 @@ for open_space in open_spaces:
     tags = "#PyConUSOpenSpaces #PyConUS2025"
     continuation = ""
 
-    max_description = 500 - len(opener) - len(tags) - 10
+    max_description = 500 - len(opener) - len(open_space["summary"]) - len(tags) - 10
 
-    if  len(details) >= max_description:
+    if len(details) >= max_description:
         continuation = " ... (cont.)"
         details = open_space["details"][:max_description - len(continuation)].rsplit(" ", 1)[0].strip()
         extra_details = open_space["details"][len(details):].strip()
@@ -117,6 +117,7 @@ for open_space in open_spaces:
 
     if should_post:
         print("\n\n---\n\n".join(posts))
+        print(len(posts[0]))
 
         mastodon_post = mastodon.status_post(
             status=posts[0],
