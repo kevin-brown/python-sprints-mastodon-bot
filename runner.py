@@ -80,7 +80,7 @@ for open_space in open_spaces:
     tags = "#PyConUSOpenSpaces #PyConUS2025"
     continuation = ""
 
-    max_description = 500 - len(opener) - len(open_space["summary"]) - len(tags) - 10
+    max_description = 500 - len(opener) - len(open_space["summary"]) - len(tags) - 25
 
     if len(details) >= max_description:
         continuation = " ... (cont.)"
