@@ -41,17 +41,16 @@ for open_space in open_space_data:
     starting_soon = timedelta(minutes=-1) < time_until_start <= timedelta(minutes=30)
     currently_happening = space_start < current_time and space_end > current_time and time_until_end >= timedelta(minutes=30)
 
-    if True:#starting_soon or currently_happening:
-        summary = f"{open_space["room"]}: {open_space["title"]}"
-        start_time = space_start.strftime("%I:%M %p")
+    summary = f"{open_space["room"]}: {open_space["title"]}"
+    start_time = space_start.strftime("%I:%M %p")
 
-        open_spaces.append({
-            "summary": summary,
-            "details": open_space["description"],
-            "start_time": start_time,
-            "start_day": space_start.strftime("%A"),
-            "sort_time": space_start
-        })
+    open_spaces.append({
+        "summary": summary,
+        "details": open_space["description"],
+        "start_time": start_time,
+        "start_day": space_start.strftime("%A"),
+        "sort_time": space_start
+    })
 
 open_spaces = sorted(open_spaces, key=lambda x: x["sort_time"])
 
@@ -75,15 +74,18 @@ for open_space in open_spaces:
 
     details = open_space["details"]
     extra_details = ""
+    continuation = ""
 
-    if len(details) > 325:
+    if len(details) > 300:
+        continuation = "... (cont.)"
+
         details = open_space["details"][:325].rsplit(" ", 1)[0].strip()
         extra_details = open_space["details"][len(details):].strip()
 
     post = f"""
 A new open space at #PyConUS was announced for {open_space["start_day"]} at {open_space["start_time"]}
 
-{open_space["summary"]}
+{open_space["summary"]}{continuation}
 
 {details}
 
