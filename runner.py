@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta, timezone
 from dateutil.parser import parse
 from mastodon import Mastodon
+import html
 import os
 import requests
 
@@ -103,7 +104,7 @@ A new open space at #PyConUS was announced for {open_space["start_day"]} at {ope
     should_post = True
 
     for post in mastodon_already_posted[open_space["start_day"]]:
-        if open_space["summary"].replace("&", "&amp;").replace('"', "&quot;").replace("'", "&#39;") in post.content:
+        if open_space["summary"] in html.unescape(post.content):
             should_post = False
             break
 

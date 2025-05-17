@@ -1,19 +1,11 @@
 from collections import defaultdict
-from datetime import datetime, timedelta, timezone
+from datetime import timedelta, timezone
 from dateutil.parser import parse
-from mastodon import Mastodon
 import os
 import requests
 import sys
 
 access_token = os.getenv("MASTODON_ACCESS_TOKEN")
-
-mastodon = Mastodon(
-    access_token=access_token,
-
-    api_base_url="https://mastodon.brown-silva.social",
-    user_agent="kevin-brown/python-sprints-mastodon-bot",
-)
 
 conference_request = requests.get("https://us.pycon.org/2025/schedule/conference.json")
 conference_data = conference_request.json()
