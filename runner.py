@@ -76,20 +76,25 @@ for open_space in open_spaces:
     extra_details = ""
     continuation = ""
 
-    if len(details) > 300:
-        continuation = "... (cont.)"
+    opener = f"A new open space at #PyConUS was announced for {open_space["start_day"]} at {open_space["start_time"]}"
+    tags = "#PyConUSOpenSpaces #PyConUS2025"
+    continuation = ""
 
-        details = open_space["details"][:325].rsplit(" ", 1)[0].strip()
+    max_description = 500 - len(opener) - len(tags) - 10
+
+    if  len(details) >= max_description:
+        continuation = " ... (cont.)"
+        details = open_space["details"][:max_description - len(continuation)].rsplit(" ", 1)[0].strip()
         extra_details = open_space["details"][len(details):].strip()
 
     post = f"""
-A new open space at #PyConUS was announced for {open_space["start_day"]} at {open_space["start_time"]}
+{opener}
 
-{open_space["summary"]}{continuation}
+{open_space["summary"]}
 
-{details}
+{details}{continuation}
 
-#PyConUSOpenSpaces #PyConUS2025
+{tags}
 """.strip()
 
     posts.append(post)
@@ -98,7 +103,7 @@ A new open space at #PyConUS was announced for {open_space["start_day"]} at {ope
         continued = f"""
 {open_space["summary"]} (continued)
 
-{extra_details}
+... {extra_details}
 """.strip()
 
         posts.append(continued)
@@ -111,7 +116,7 @@ A new open space at #PyConUS was announced for {open_space["start_day"]} at {ope
             break
 
     if should_post:
-        print(posts)
+        print("\n\n---\n\n".join(posts))
 
         mastodon_post = mastodon.status_post(
             status=posts[0],
