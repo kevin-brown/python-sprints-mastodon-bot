@@ -14,7 +14,7 @@ mastodon = Mastodon(
     user_agent="kevin-brown/python-sprints-mastodon-bot",
 )
 
-conference_request = requests.get("https://us.pycon.org/2025/schedule/conference.json")
+conference_request = requests.get("https://us.pycon.org/2026/schedule/conference.json")
 conference_data = conference_request.json()
 
 open_space_data = conference_data["open-spaces"]
@@ -55,9 +55,9 @@ for open_space in open_space_data:
 open_spaces = sorted(open_spaces, key=lambda x: x["sort_time"])
 
 mastodon_posts_by_day = {
-    "Friday": 114512945743943792,
-    "Saturday": 114513045657865732,
-    "Sunday": 114513077119524653,
+    "Friday": 116579028520836604,
+    "Saturday": 116579031949412233,
+    "Sunday": 116579033989125517,
 }
 
 mastodon_already_posted = {
@@ -77,7 +77,7 @@ for open_space in open_spaces:
     continuation = ""
 
     opener = f"A new open space at #PyConUS was announced for {open_space["start_day"]} at {open_space["start_time"]}"
-    tags = "#PyConUSOpenSpaces #PyConUS2025"
+    tags = "#PyConUSOpenSpaces #PyConUS2026"
     continuation = ""
 
     max_description = 500 - len(opener) - len(open_space["summary"]) - len(tags) - 25

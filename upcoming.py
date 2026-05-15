@@ -7,13 +7,13 @@ import sys
 
 access_token = os.getenv("MASTODON_ACCESS_TOKEN")
 
-conference_request = requests.get("https://us.pycon.org/2025/schedule/conference.json")
+conference_request = requests.get("https://us.pycon.org/2026/schedule/conference.json")
 conference_data = conference_request.json()
 
 open_space_data = conference_data["open-spaces"]
 
 current_time = parse(sys.argv[1]).replace(
-    tzinfo=timezone(timedelta(hours=-4)),
+    tzinfo=timezone(timedelta(hours=-7)),
 )
 
 open_spaces = []
