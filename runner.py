@@ -4,6 +4,7 @@ from mastodon import Mastodon
 import html
 import os
 import requests
+import time
 
 access_token = os.getenv("MASTODON_ACCESS_TOKEN")
 
@@ -127,11 +128,11 @@ for open_space in open_spaces:
 
         mastodon_already_posted[open_space["start_day"]].append(mastodon_post)
 
-        if len(posts) > 1:
+        if len(posts) > 1 and len(posts[1]) <= 500:
             mastodon.status_post(
                 status=posts[1],
                 visibility="unlisted",
                 in_reply_to_id=mastodon_post.id,
             )
 
-        break
+        time.sleep(30)
